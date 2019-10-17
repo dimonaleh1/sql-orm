@@ -1,0 +1,61 @@
+{
+  "name": "mysql-orm",
+  "version": "1.0.0",
+  "description": "",
+  "engines": {
+    "node": "8.9.x"
+  },
+  "scripts": {
+    "build": "./node_modules/.bin/webpack --mode production",
+    "prepublish": "npm run test && rm -r .idea && rm webpack.config.js && rm tslint.json && rm tsconfig.json && rm .gitignore && rm -r work",
+    "postpublish": "git reset --hard HEAD",
+    "test": "jest",
+    "pretty": "pretty-quick --staged"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run pretty",
+      "pre-push": "npm test",
+      "...": "..."
+    }
+  },
+  "cacheDirectories": [
+    "node_modules"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Muzikanto/mysql-orm"
+  },
+  "homepage": "https://github.com/Muzikanto/mysql-orm#readme",
+  "keywords": [
+    "mysql",
+    "sql",
+    "orm",
+    "query builder"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "Maxim",
+    "email": "v899111121@gmail.com",
+    "url": "https://github.com/Muzikanto"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/chai": "4.1.7",
+    "@types/jest": "24.0.19",
+    "@types/node": "10.12.12",
+    "chai": "4.2.0",
+    "husky": "3.0.9",
+    "jest": "24.9.0",
+    "mocha": "5.2.0",
+    "prettier": "1.18.2",
+    "pretty-quick": "2.0.0",
+    "ts-jest": "24.1.0",
+    "ts-loader": "5.3.1",
+    "ts-mocha": "2.0.0",
+    "tslint": "5.11.0",
+    "typescript": "3.6.4",
+    "webpack": "4.27.1",
+    "webpack-cli": "3.1.2"
+  }
+}
