@@ -16,4 +16,8 @@ function prepareWhereItem(
   }
 }
 
-export { prepareWhereItem };
+function encodeValue(value: string | number | boolean | null) {
+  return typeof value === 'string' ? `'${value}'` : value;
+}
+
+export { prepareWhereItem, encodeValue };

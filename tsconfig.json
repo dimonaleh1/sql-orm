@@ -17,7 +17,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
     "noUnusedParameters": false,
-
+    "declarationDir": "./types",
     "declaration": true,
 
     "emitDecoratorMetadata": true,
@@ -32,5 +32,5 @@
     "rootDirs": ["."],
     "outDir": "./"
   },
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "**/*.test.ts"]
 }

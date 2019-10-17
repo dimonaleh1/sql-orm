@@ -1,14 +1,14 @@
 {
-  "name": "mysql-orm",
+  "name": "sql-orm",
   "version": "1.0.0",
   "description": "",
   "engines": {
     "node": "8.9.x"
   },
   "scripts": {
+    "start": "ts-node ./work/example.ts",
     "build": "./node_modules/.bin/webpack --mode production",
-    "prepublish": "npm run test && rm -r .idea && rm webpack.config.js && rm tslint.json && rm tsconfig.json && rm .gitignore && rm -r work",
-    "postpublish": "git reset --hard HEAD",
+    "prepublish": "npm test",
     "test": "jest",
     "pretty": "pretty-quick --staged"
   },
@@ -31,7 +31,9 @@
     "mysql",
     "sql",
     "orm",
-    "query builder"
+    "query builder",
+    "query",
+    "builder"
   ],
   "license": "MIT",
   "author": {
