@@ -37,6 +37,7 @@ model.use(SqlRequest(connection));
 ```typescript
 # select
 model.select(['name', 'age']
+     .join("JOIN city ON user.city_id=city.id")
      .where({age: 20})
      .limit(10)
      .offset(20)
@@ -48,6 +49,7 @@ model.select(['name', 'age']
 // OR
 
 model.select(['name', 'age']);
+model.join("JOIN city ON user.city_id=city.id")
 model.where({age: 20});
 model.limit(10);
 model.offset(20);
@@ -63,11 +65,14 @@ model
 # delete
 model
     .delete()
+    .join("JOIN city ON user.city_id=city.id")
     .where({age: 20})
     .build()
 
 # update
 model
     .update({age: 20})
+    .join("JOIN city ON user.city_id=city.id")
+    .where({age: 19})
     .build();
 ```
