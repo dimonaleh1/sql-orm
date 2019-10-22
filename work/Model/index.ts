@@ -3,7 +3,7 @@ import { encodeValue, prepareWhereItem } from "./Model.helpers";
 interface IQueryState {
   type?: "select" | "insert" | "delete" | "update";
 
-  select?: string[];
+  select?: string[] | string;
   update?:
     | {
         [key: string]:
@@ -30,11 +30,12 @@ interface IQueryState {
   order?: string;
   group?: string[] | string;
 
-  single?: string;
+  insert?: string;
+  returning?: string[];
 }
 
-class Builder<Schema extends object> {
-  protected handleBuild: ((q: string) => any) | null = null;
+class Builder {
+  protected handleBuild: (<Row>(q: string) => Promise<Row[]>) | null = null;
   protected name: string;
   protected state: IQueryState = {};
 
@@ -46,7 +47,7 @@ class Builder<Schema extends object> {
     this.name = name;
   }
 
-  public insert = (params: Schema) => {
+  public insert = (params: object) => {
     const keys = Object.keys(params)
       .map(key => `${key}`)
       .join(",");
@@ -56,15 +57,29 @@ class Builder<Schema extends object> {
 
     this.state = {
       type: "insert",
-      single: `INSERT INTO ${this.name} (${keys}) VALUES (${values});`
+      insert: `INSERT INTO ${this.name} (${keys}) VALUES (${values})`
     };
 
     return {
-      build: this.build
+      returning: this.returning,
+      execute: this.execute,
+      query: this.query
     };
   };
 
-  public select = (select: string[] = []) => {
+  protected returning = (returning: string[]) => {
+    this.state = {
+      ...this.state,
+      returning: returning as string[]
+    };
+
+    return {
+      execute: this.execute,
+      query: this.query
+    };
+  };
+
+  public select = (select: string[] | string = "*") => {
     this.state = {
       type: "select",
       select
@@ -77,7 +92,8 @@ class Builder<Schema extends object> {
       order: this.order,
       group: this.group,
       offset: this.offset,
-      build: this.build
+      execute: this.execute,
+      query: this.query
     };
   };
 
@@ -89,11 +105,12 @@ class Builder<Schema extends object> {
     return {
       join: this.join,
       where: this.where,
-      build: this.build
+      execute: this.execute,
+      query: this.query
     };
   };
 
-  public update = (update: Partial<Schema>) => {
+  public update = (update: object | string) => {
     this.state = ({
       type: "update",
       update
@@ -102,7 +119,8 @@ class Builder<Schema extends object> {
     return {
       join: this.join,
       where: this.where,
-      build: this.build
+      execute: this.execute,
+      query: this.query
     };
   };
 
@@ -118,7 +136,8 @@ class Builder<Schema extends object> {
       order: this.order,
       group: this.group,
       offset: this.offset,
-      build: this.build
+      execute: this.execute,
+      query: this.query
     };
   };
 
@@ -144,7 +163,8 @@ class Builder<Schema extends object> {
       order: this.order,
       group: this.group,
       offset: this.offset,
-      build: this.build
+      execute: this.execute,
+      query: this.query
     };
   };
 
@@ -158,7 +178,8 @@ class Builder<Schema extends object> {
       order: this.order,
       group: this.group,
       offset: this.offset,
-      build: this.build
+      execute: this.execute,
+      query: this.query
     };
   };
 
@@ -171,7 +192,8 @@ class Builder<Schema extends object> {
     return {
       order: this.order,
       group: this.group,
-      build: this.build
+      execute: this.execute,
+      query: this.query
     };
   };
 
@@ -183,7 +205,8 @@ class Builder<Schema extends object> {
 
     return {
       group: this.group,
-      build: this.build
+      execute: this.execute,
+      query: this.query
     };
   };
 
@@ -194,24 +217,52 @@ class Builder<Schema extends object> {
     };
 
     return {
-      build: this.build
+      execute: this.execute,
+      query: this.query
     };
   };
 
-  protected build = () => {
+  protected execute = <Row>() => {
     const state = this.state;
 
+    if (!this.handleBuild) {
+      throw new Error(
+        `Model ${this.name} need execute handler, example: model.use(async(query: string)=>Rows);`
+      );
+    }
+
+    const query = this.buildQuery(state);
+
+    return this.handleBuild<Row>(query);
+  };
+
+  protected query = () => {
+    const state = this.state;
+
+    return this.buildQuery(state);
+  };
+
+  protected buildQuery = (state: IQueryState) => {
     const params = [];
 
-    if (state.single) {
-      return this.handleBuild ? this.handleBuild(state.single) : state.single;
+    if (state.type === "insert") {
+      params.push(state.insert);
+
+      if (state.returning) {
+        params.push("returning");
+        params.push(state.returning.join(","));
+      }
     }
 
     if (state.type === "select") {
       let select = "*";
 
-      if (state.select && state.select.length > 0) {
-        select = state.select.join(",");
+      if (typeof state.select === "string") {
+        select = state.select;
+      } else {
+        if (state.select && state.select.length > 0) {
+          select = state.select.join(",");
+        }
       }
 
       params.push(`SELECT ${select}`);
@@ -221,7 +272,7 @@ class Builder<Schema extends object> {
       params.push(`DELETE`);
     }
 
-    if (state.type !== "update") {
+    if (state.type !== "update" && state.type !== "insert") {
       params.push(`FROM ${this.name}`);
     }
 
@@ -245,12 +296,19 @@ class Builder<Schema extends object> {
       if (update) {
         params.push("SET");
 
-        const str = Object.keys(update).reduce((acc: string[], key: string) => {
-          // @ts-ignore
-          return [...acc, `${key}=${encodeValue(update[key])}`];
-        }, []);
+        if (typeof update === "string") {
+          params.push(update);
+        } else {
+          const str = Object.keys(update).reduce(
+            (acc: string[], key: string) => {
+              // @ts-ignore
+              return [...acc, `${key}=${encodeValue(update[key])}`];
+            },
+            []
+          );
 
-        params.push(str.join(","));
+          params.push(str.join(","));
+        }
       }
     }
 
@@ -290,12 +348,12 @@ class Builder<Schema extends object> {
 
     const query = params.join(" ") + ";";
 
-    return this.handleBuild ? this.handleBuild(query) : query;
+    return query;
   };
 }
 
-function Model<Schema extends object>(name: string) {
-  const builder = new Builder<Schema>(name);
+function Model(name: string) {
+  const builder = new Builder(name);
 
   return builder;
 }

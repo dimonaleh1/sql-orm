@@ -14,24 +14,24 @@ describe("Select", function() {
   });
 
   it("empty", function() {
-    const test = model.select().build();
+    const test = model.select().query();
 
     expect(test).to.be.equal(`SELECT * FROM user;`);
   });
 
   it("one column", function() {
-    const test = model.select(["name"]).build();
+    const test = model.select(["name"]).query();
 
     expect(test).to.be.equal(`SELECT name FROM user;`);
   });
 
   it("one column", function() {
-    const test = model.select(["name"]).build();
+    const test = model.select(["name"]).query();
 
     expect(test).to.be.equal(`SELECT name FROM user;`);
   });
 
-  it("partial build", function() {
+  it("partial execute", function() {
     const test = model.select();
     test.join("JOIN user ON test=1");
     test.where({ age: 20 });
@@ -40,7 +40,7 @@ describe("Select", function() {
     test.order("name");
     test.group(["name"]);
 
-    expect(test.build()).to.be.equal(
+    expect(test.query()).to.be.equal(
       `SELECT * FROM user JOIN user ON test=1 WHERE age=20 LIMIT 10 OFFSET 20 ORDER BY name GROUP BY name;`
     );
   });
@@ -54,7 +54,7 @@ describe("Select", function() {
       .offset(20)
       .order("name")
       .group(["name"])
-      .build();
+      .query();
 
     expect(test).to.be.equal(
       `SELECT * FROM user JOIN user ON test=1 WHERE age=20 LIMIT 10 OFFSET 20 ORDER BY name GROUP BY name;`

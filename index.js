@@ -1,1 +1,341 @@
-!function(e,t){for(var r in t)e[r]=t[r]}(exports,function(e){var t={};function r(n){if(t[n])return t[n].exports;var u=t[n]={i:n,l:!1,exports:{}};return e[n].call(u.exports,u,u.exports,r),u.l=!0,u.exports}return r.m=e,r.c=t,r.d=function(e,t,n){r.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:n})},r.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},r.t=function(e,t){if(1&t&&(e=r(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var n=Object.create(null);if(r.r(n),Object.defineProperty(n,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var u in e)r.d(n,u,function(t){return e[t]}.bind(null,u));return n},r.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return r.d(t,"a",t),t},r.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},r.p="",r(r.s=0)}([function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var n=r(1);t.Model=n.default},function(e,t,r){"use strict";var n=this&&this.__assign||function(){return(n=Object.assign||function(e){for(var t,r=1,n=arguments.length;r<n;r++)for(var u in t=arguments[r])Object.prototype.hasOwnProperty.call(t,u)&&(e[u]=t[u]);return e}).apply(this,arguments)},u=this&&this.__spreadArrays||function(){for(var e=0,t=0,r=arguments.length;t<r;t++)e+=arguments[t].length;var n=Array(e),u=0;for(t=0;t<r;t++)for(var i=arguments[t],o=0,s=i.length;o<s;o++,u++)n[u]=i[o];return n};Object.defineProperty(t,"__esModule",{value:!0});var i=r(2),o=function(){return function(e){var t=this;this.handleBuild=null,this.state={},this.use=function(e){t.handleBuild=e},this.insert=function(e){var r=Object.keys(e).map(function(e){return""+e}).join(","),n=Object.values(e).map(i.encodeValue).join(",");return t.state={type:"insert",single:"INSERT INTO "+t.name+" ("+r+") VALUES ("+n+");"},{build:t.build}},this.select=function(e){return void 0===e&&(e=[]),t.state={type:"select",select:e},{where:t.where,limit:t.limit,order:t.order,group:t.group,offset:t.offset,build:t.build}},this.delete=function(){return t.state={type:"delete"},{where:t.where,build:t.build}},this.update=function(e){return t.state={type:"update",update:e},{where:t.where,build:t.build}},this.where=function(e){return t.state=n(n({},t.state),{where:e}),{limit:t.limit,order:t.order,group:t.group,offset:t.offset,build:t.build}},this.limit=function(e){return t.state=n(n({},t.state),{limit:e}),{order:t.order,group:t.group,offset:t.offset,build:t.build}},this.offset=function(e){return t.state=n(n({},t.state),{offset:e}),{order:t.order,group:t.group,build:t.build}},this.order=function(e){return t.state=n(n({},t.state),{order:e}),{group:t.group,build:t.build}},this.group=function(e){return t.state=n(n({},t.state),{group:e}),{build:t.build}},this.build=function(){var e=t.state,r=[];if(e.single)return t.handleBuild?t.handleBuild(e.single):e.single;if("select"===e.type){var n="*";e.select&&e.select.length>0&&(n=e.select.join(",")),r.push("SELECT "+n)}if("delete"===e.type&&r.push("DELETE"),"update"===e.type){r.push("UPDATE "+t.name);var o=t.state.update;if(!o||0===Object.keys(o).length)throw new Error("Empty Update params");if(o){r.push("SET");var s=Object.keys(o).reduce(function(e,t){return u(e,[t+"="+i.encodeValue(o[t])])},[]);r.push(s.join(","))}}"update"!==e.type&&r.push("FROM "+t.name);var l=e.where;if(l)if("object"==typeof l){var a="WHERE "+Object.keys(l).map(function(e){return i.prepareWhereItem(e,l[e])}).join(" AND ");r.push(a)}else r.push("WHERE "+l);e.limit&&r.push("LIMIT "+e.limit),e.offset&&r.push("OFFSET "+e.offset),e.order&&r.push("ORDER BY "+e.order),e.group&&e.group.length>0&&r.push("GROUP BY "+e.group.join(","));var f=r.join(" ")+";";return t.handleBuild?t.handleBuild(f):f},this.name=e}}();t.default=function(e){return new o(e)}},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.prepareWhereItem=function(e,t){switch(typeof t){case"object":return null===t?e+" IS NULL":e+" IN ("+t+")";case"string":return e+"='"+t+"'";default:return e+"="+t}},t.encodeValue=function(e){return"string"==typeof e?"'"+e+"'":e}}]));
+!(function(e, t) {
+  for (var r in t) e[r] = t[r];
+})(
+  exports,
+  (function(e) {
+    var t = {};
+    function r(u) {
+      if (t[u]) return t[u].exports;
+      var n = (t[u] = { i: u, l: !1, exports: {} });
+      return e[u].call(n.exports, n, n.exports, r), (n.l = !0), n.exports;
+    }
+    return (
+      (r.m = e),
+      (r.c = t),
+      (r.d = function(e, t, u) {
+        r.o(e, t) || Object.defineProperty(e, t, { enumerable: !0, get: u });
+      }),
+      (r.r = function(e) {
+        "undefined" != typeof Symbol &&
+          Symbol.toStringTag &&
+          Object.defineProperty(e, Symbol.toStringTag, { value: "Module" }),
+          Object.defineProperty(e, "__esModule", { value: !0 });
+      }),
+      (r.t = function(e, t) {
+        if ((1 & t && (e = r(e)), 8 & t)) return e;
+        if (4 & t && "object" == typeof e && e && e.__esModule) return e;
+        var u = Object.create(null);
+        if (
+          (r.r(u),
+          Object.defineProperty(u, "default", { enumerable: !0, value: e }),
+          2 & t && "string" != typeof e)
+        )
+          for (var n in e)
+            r.d(
+              u,
+              n,
+              function(t) {
+                return e[t];
+              }.bind(null, n)
+            );
+        return u;
+      }),
+      (r.n = function(e) {
+        var t =
+          e && e.__esModule
+            ? function() {
+                return e.default;
+              }
+            : function() {
+                return e;
+              };
+        return r.d(t, "a", t), t;
+      }),
+      (r.o = function(e, t) {
+        return Object.prototype.hasOwnProperty.call(e, t);
+      }),
+      (r.p = ""),
+      r((r.s = 0))
+    );
+  })([
+    function(e, t, r) {
+      "use strict";
+      Object.defineProperty(t, "__esModule", { value: !0 });
+      var u = r(1);
+      t.Model = u.default;
+    },
+    function(e, t, r) {
+      "use strict";
+      var u =
+          (this && this.__assign) ||
+          function() {
+            return (u =
+              Object.assign ||
+              function(e) {
+                for (var t, r = 1, u = arguments.length; r < u; r++)
+                  for (var n in (t = arguments[r]))
+                    Object.prototype.hasOwnProperty.call(t, n) && (e[n] = t[n]);
+                return e;
+              }).apply(this, arguments);
+          },
+        n =
+          (this && this.__spreadArrays) ||
+          function() {
+            for (var e = 0, t = 0, r = arguments.length; t < r; t++)
+              e += arguments[t].length;
+            var u = Array(e),
+              n = 0;
+            for (t = 0; t < r; t++)
+              for (var o = arguments[t], i = 0, s = o.length; i < s; i++, n++)
+                u[n] = o[i];
+            return u;
+          };
+      Object.defineProperty(t, "__esModule", { value: !0 });
+      var o = r(2),
+        i = (function() {
+          return function(e) {
+            var t = this;
+            (this.handleBuild = null),
+              (this.state = {}),
+              (this.use = function(e) {
+                t.handleBuild = e;
+              }),
+              (this.insert = function(e) {
+                var r = Object.keys(e)
+                    .map(function(e) {
+                      return "" + e;
+                    })
+                    .join(","),
+                  u = Object.values(e)
+                    .map(o.encodeValue)
+                    .join(",");
+                return (
+                  (t.state = {
+                    type: "insert",
+                    insert:
+                      "INSERT INTO " +
+                      t.name +
+                      " (" +
+                      r +
+                      ") VALUES (" +
+                      u +
+                      ")"
+                  }),
+                  { returning: t.returning, execute: t.execute, query: t.query }
+                );
+              }),
+              (this.returning = function(e) {
+                return (
+                  (t.state = u(u({}, t.state), { returning: e })),
+                  { execute: t.execute, query: t.query }
+                );
+              }),
+              (this.select = function(e) {
+                return (
+                  void 0 === e && (e = "*"),
+                  (t.state = { type: "select", select: e }),
+                  {
+                    join: t.join,
+                    where: t.where,
+                    limit: t.limit,
+                    order: t.order,
+                    group: t.group,
+                    offset: t.offset,
+                    execute: t.execute,
+                    query: t.query
+                  }
+                );
+              }),
+              (this.delete = function() {
+                return (
+                  (t.state = { type: "delete" }),
+                  {
+                    join: t.join,
+                    where: t.where,
+                    execute: t.execute,
+                    query: t.query
+                  }
+                );
+              }),
+              (this.update = function(e) {
+                return (
+                  (t.state = { type: "update", update: e }),
+                  {
+                    join: t.join,
+                    where: t.where,
+                    execute: t.execute,
+                    query: t.query
+                  }
+                );
+              }),
+              (this.join = function(e) {
+                return (
+                  (t.state = u(u({}, t.state), { join: e })),
+                  {
+                    where: t.where,
+                    limit: t.limit,
+                    order: t.order,
+                    group: t.group,
+                    offset: t.offset,
+                    execute: t.execute,
+                    query: t.query
+                  }
+                );
+              }),
+              (this.where = function(e) {
+                return (
+                  (t.state = u(u({}, t.state), { where: e })),
+                  {
+                    limit: t.limit,
+                    order: t.order,
+                    group: t.group,
+                    offset: t.offset,
+                    execute: t.execute,
+                    query: t.query
+                  }
+                );
+              }),
+              (this.limit = function(e) {
+                return (
+                  (t.state = u(u({}, t.state), { limit: e })),
+                  {
+                    order: t.order,
+                    group: t.group,
+                    offset: t.offset,
+                    execute: t.execute,
+                    query: t.query
+                  }
+                );
+              }),
+              (this.offset = function(e) {
+                return (
+                  (t.state = u(u({}, t.state), { offset: e })),
+                  {
+                    order: t.order,
+                    group: t.group,
+                    execute: t.execute,
+                    query: t.query
+                  }
+                );
+              }),
+              (this.order = function(e) {
+                return (
+                  (t.state = u(u({}, t.state), { order: e })),
+                  { group: t.group, execute: t.execute, query: t.query }
+                );
+              }),
+              (this.group = function(e) {
+                return (
+                  (t.state = u(u({}, t.state), { group: e })),
+                  { execute: t.execute, query: t.query }
+                );
+              }),
+              (this.execute = function() {
+                var e = t.state;
+                if (!t.handleBuild)
+                  throw new Error(
+                    "Model " +
+                      t.name +
+                      " need execute handler, example: model.use(async(query: string)=>Rows);"
+                  );
+                var r = t.buildQuery(e);
+                return t.handleBuild(r);
+              }),
+              (this.query = function() {
+                var e = t.state;
+                return t.buildQuery(e);
+              }),
+              (this.buildQuery = function(e) {
+                var r = [];
+                if (
+                  ("insert" === e.type &&
+                    (r.push(e.insert),
+                    e.returning &&
+                      (r.push("returning"), r.push(e.returning.join(",")))),
+                  "select" === e.type)
+                ) {
+                  var u = "*";
+                  "string" == typeof e.select
+                    ? (u = e.select)
+                    : e.select &&
+                      e.select.length > 0 &&
+                      (u = e.select.join(",")),
+                    r.push("SELECT " + u);
+                }
+                if (
+                  ("delete" === e.type && r.push("DELETE"),
+                  "update" !== e.type &&
+                    "insert" !== e.type &&
+                    r.push("FROM " + t.name),
+                  "update" === e.type && r.push("UPDATE " + t.name),
+                  e.join &&
+                    r.push(
+                      "object" == typeof e.join ? e.join.join(" ") : e.join
+                    ),
+                  "update" === e.type)
+                ) {
+                  var i = t.state.update;
+                  if (!i || 0 === Object.keys(i).length)
+                    throw new Error("Empty Update params");
+                  if (i)
+                    if ((r.push("SET"), "string" == typeof i)) r.push(i);
+                    else {
+                      var s = Object.keys(i).reduce(function(e, t) {
+                        return n(e, [t + "=" + o.encodeValue(i[t])]);
+                      }, []);
+                      r.push(s.join(","));
+                    }
+                }
+                var c = e.where;
+                if (c)
+                  if ("object" == typeof c) {
+                    var a =
+                      "WHERE " +
+                      Object.keys(c)
+                        .map(function(e) {
+                          return o.prepareWhereItem(e, c[e]);
+                        })
+                        .join(" AND ");
+                    r.push(a);
+                  } else r.push("WHERE " + c);
+                return (
+                  e.limit && r.push("LIMIT " + e.limit),
+                  e.offset && r.push("OFFSET " + e.offset),
+                  e.order && r.push("ORDER BY " + e.order),
+                  e.group &&
+                    e.group.length > 0 &&
+                    r.push(
+                      "GROUP BY " +
+                        ("object" == typeof e.group
+                          ? e.group.join(",")
+                          : e.group)
+                    ),
+                  r.join(" ") + ";"
+                );
+              }),
+              (this.name = e);
+          };
+        })();
+      t.default = function(e) {
+        return new i(e);
+      };
+    },
+    function(e, t, r) {
+      "use strict";
+      Object.defineProperty(t, "__esModule", { value: !0 }),
+        (t.prepareWhereItem = function(e, t) {
+          switch (typeof t) {
+            case "object":
+              return null === t ? e + " IS NULL" : e + " IN (" + t + ")";
+            case "string":
+              return e + "='" + t + "'";
+            default:
+              return e + "=" + t;
+          }
+        }),
+        (t.encodeValue = function(e) {
+          return "string" == typeof e ? "'" + e + "'" : e;
+        });
+    }
+  ])
+);

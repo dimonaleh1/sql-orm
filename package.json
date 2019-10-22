@@ -1,6 +1,6 @@
 {
-  "name": "sql-orm",
-  "version": "1.0.0",
+  "name": "@muzikanto/sql-orm",
+  "version": "1.0.2",
   "description": "",
   "engines": {
     "node": "8.9.x"
@@ -8,7 +8,7 @@
   "scripts": {
     "start": "ts-node ./work/example.ts",
     "build": "./node_modules/.bin/webpack --mode production",
-    "prepublish": "npm test",
+    "prepublish": "npm test && npm run build",
     "test": "jest",
     "pretty": "pretty-quick --staged"
   },

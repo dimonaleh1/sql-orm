@@ -2,3 +2,5 @@
 node_modules
 types
 test.ts
+index.js
+index.d.ts

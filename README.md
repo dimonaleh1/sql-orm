@@ -1,78 +1,82 @@
 ## SQL query builder and connect request middleware
 
-#### Create Handler
-
-```typescript
-const SqlRequest = (connection: Connection) => <R extends object>(
-  query: string
-) =>
-  new Promise<R[]>(
-    (resolve: (result: R[]) => void, reject: (err: Error) => void) => {
-      connection.query(query, (err: Error, result: R[], fields: any[]) => {
-        if (err) {
-          reject(err);
-
-          return;
-        }
-
-        resolve(result);
-      });
-    }
-  );
-```
-
 ### Create Model
 
 ```typescript
-interface IUser {
-  name: string;
-  age: number;
-}
-const model = Model<IUser>("user");
-model.use(SqlRequest(connection));
+const model = Model("user");
+model.use(async (query: string) => {
+  // todo
+  return [] as Rows;
+});
 ```
 
 ### Use Model
 
 ```typescript
-# select
-model.select(['name', 'age']
+model
+    .select(['name', 'age']
+    .where({age: 20})
+    .execute<{ test: number }>()
+    .then(rows=>{});
+
+----- OR -----
+
+const select = model.select(['name', 'age'];
+select.where({age: 20});
+select
+    .execute<{ test: number }>()
+    .then(rows=>{});
+
+----- OR -----
+
+const sqlQuery = model
+    .select(['name', 'age']
+    .where({age: 20})
+    .query();
+```
+
+## insert
+
+```typescript
+model
+  .insert({ name: "Maxim", age: 20 })
+  .execute()
+  .then(rows);
+```
+
+## select
+
+```typescript
+model
+    .select(['name', 'age']
      .join("JOIN city ON user.city_id=city.id")
      .where({age: 20})
      .limit(10)
      .offset(20)
      .order('name')
      .group(['name'])
-     .build()
-     .then(console.log); // return rows
+     .execute()
+     .then(rows=>{});
+```
 
-// OR
+## update
 
-model.select(['name', 'age']);
-model.join("JOIN city ON user.city_id=city.id")
-model.where({age: 20});
-model.limit(10);
-model.offset(20);
-model.order('name');
-model.group(['name']);
-model.build().then(console.log); // return rows
-
-# insert
+```typescript
 model
-    .insert({name: 'Maxim', age: 20})
-    .build()
+  .update({ age: 20 })
+  .join("JOIN city ON user.city_id=city.id")
+  .where({ age: 19 })
+  .execute()
+  .then(rows => {});
+```
 
-# delete
-model
-    .delete()
-    .join("JOIN city ON user.city_id=city.id")
-    .where({age: 20})
-    .build()
+## delete
 
-# update
+```typescript
 model
-    .update({age: 20})
-    .join("JOIN city ON user.city_id=city.id")
-    .where({age: 19})
-    .build();
+  .delete()
+  .join("JOIN city ON user.city_id=city.id")
+  .where({ age: 20 })
+  .execute()
+  .then(rows => {});
 ```

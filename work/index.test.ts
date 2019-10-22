@@ -1,37 +1,41 @@
-import {expect} from 'chai';
-import Model from './Model';
+import { expect } from "chai";
+import Model from "./Model";
 
 interface IUser {
-    name: string;
-    age: number;
+  name: string;
+  age: number;
 }
 
-describe('With middleware', function () {
-    let model =  Model<IUser>('user');
+describe("With middleware", function() {
+  let model = Model<IUser>("user");
 
-    beforeEach(() => {
-        model = Model<IUser>('user');
-    });
+  beforeEach(() => {
+    model = Model<IUser>("user");
+  });
 
-    it('async', async function () {
-       model.use(async (query: string) => `Query: ${query}`);
+  it("async", async function() {
+    model.use(async (query: string) => `Query: ${query}`);
 
-       const result = await model
-            .select(['name', 'age'])
-            .where({name: 'Maxim'})
-            .build();
+    const result = await model
+      .select(["name", "age"])
+      .where({ name: "Maxim" })
+      .execute();
 
-       expect(result).to.be.equal(`Query: SELECT name,age FROM user WHERE name='Maxim';`);
-    });
+    expect(result).to.be.equal(
+      `Query: SELECT name,age FROM user WHERE name='Maxim';`
+    );
+  });
 
-    it('async', async function () {
-        model.use((query: string) => `Query: ${query}`);
+  it("async", async function() {
+    model.use((query: string) => `Query: ${query}`);
 
-        const result = await model
-            .select(['name', 'age'])
-            .where({name: 'Maxim'})
-            .build();
+    const result = await model
+      .select(["name", "age"])
+      .where({ name: "Maxim" })
+      .execute();
 
-        expect(result).to.be.equal(`Query: SELECT name,age FROM user WHERE name='Maxim';`);
-    });
+    expect(result).to.be.equal(
+      `Query: SELECT name,age FROM user WHERE name='Maxim';`
+    );
+  });
 });

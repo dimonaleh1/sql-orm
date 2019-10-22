@@ -14,23 +14,23 @@ describe("Update", function() {
   });
 
   it("empty", function() {
-    const test = model.update({}).build;
+    const test = model.update({});
 
-    expect(test).to.be.throw("Empty Update params");
+    expect(test.query).to.be.throw("Empty Update params");
   });
 
   it("one column", function() {
-    const test = model.update({ age: 20 }).build();
+    const test = model.update({ age: 20 }).query();
 
     expect(test).to.be.equal(`UPDATE user SET age=20;`);
   });
 
-  it("partial build", function() {
+  it("partial execute", function() {
     const test = model.update({ age: 21 });
     test.join("JOIN user ON test=1");
     test.where({ age: 20 });
 
-    expect(test.build()).to.be.equal(
+    expect(test.query()).to.be.equal(
       `UPDATE user JOIN user ON test=1 SET age=21 WHERE age=20;`
     );
   });
@@ -40,7 +40,7 @@ describe("Update", function() {
       .update({ age: 21 })
       .join("JOIN user ON test=1")
       .where({ age: 20 })
-      .build();
+      .query();
 
     expect(test).to.be.equal(
       `UPDATE user JOIN user ON test=1 SET age=21 WHERE age=20;`

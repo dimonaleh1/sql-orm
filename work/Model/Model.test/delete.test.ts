@@ -14,7 +14,7 @@ describe("Delete", function() {
   });
 
   it("empty", function() {
-    const test = model.delete().build();
+    const test = model.delete().query();
 
     expect(test).to.be.equal(`DELETE FROM user;`);
   });
@@ -24,7 +24,7 @@ describe("Delete", function() {
       .delete()
       .join("JOIN user ON test=1")
       .where({ age: 20 })
-      .build();
+      .query();
 
     expect(test).to.be.equal(
       `DELETE FROM user JOIN user ON test=1 WHERE age=20;`

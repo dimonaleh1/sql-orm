@@ -1,12 +1,11 @@
 import Model from "./Model";
 
-interface IUser {
-  name: string;
-  age: number;
+async function handler(query: string) {
+  return { query };
 }
 
-const model = Model<IUser>("user");
-model.use(async (query: string) => "Query: " + query);
+const model = Model("user");
+model.use(handler);
 
 model
   .select(["name", "age"])
@@ -16,23 +15,24 @@ model
   .offset(20)
   .order("test")
   .group("age")
-  .build()
+  .execute<{ test: number }>()
   .then(console.log);
 
 model
   .insert({ name: "test", age: 20 })
-  .build()
+  .returning(["name"])
+  .execute()
   .then(console.log);
 
 model
   .update({ name: "test", age: 20 })
   .join("JOIN user ON test=1")
-  .build()
+  .execute()
   .then(console.log);
 
 model
   .delete()
   .join("JOIN user ON test=1")
   .where({ age: 20 })
-  .build()
+  .execute()
   .then(console.log);

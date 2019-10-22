@@ -17,7 +17,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
     "noUnusedParameters": false,
-    "declarationDir": "./types",
+    "declarationDir": ".",
     "declaration": true,
 
     "emitDecoratorMetadata": true,
