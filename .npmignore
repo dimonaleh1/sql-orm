@@ -4,6 +4,10 @@ webpack.config.json
 jest.config.js
 .gitignore
 .npmignore
-work
 node_modules
 .idea
+
+work/index.test.ts
+work/Model/Model.test
+work/Model/.index.ts
+index.ts

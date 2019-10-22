@@ -35,7 +35,9 @@ interface IQueryState {
 }
 
 class Builder {
-  protected handleBuild: (<Row>(q: string) => Promise<Row[]>) | null = null;
+  protected handleBuild:
+    | (<Rows = any>(q: string) => Promise<Rows>)
+    | null = null;
   protected name: string;
   protected state: IQueryState = {};
 
@@ -222,7 +224,7 @@ class Builder {
     };
   };
 
-  protected execute = <Row>() => {
+  protected execute = <Rows>() => {
     const state = this.state;
 
     if (!this.handleBuild) {
@@ -233,7 +235,7 @@ class Builder {
 
     const query = this.buildQuery(state);
 
-    return this.handleBuild<Row>(query);
+    return this.handleBuild<Rows>(query);
   };
 
   protected query = () => {

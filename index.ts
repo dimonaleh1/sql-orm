@@ -1,3 +1,3 @@
-import Model from "./work/Model/index";
+import Model from "./work/Model";
 
 export { Model };

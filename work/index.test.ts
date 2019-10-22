@@ -1,16 +1,11 @@
 import { expect } from "chai";
 import Model from "./Model";
 
-interface IUser {
-  name: string;
-  age: number;
-}
-
 describe("With middleware", function() {
-  let model = Model<IUser>("user");
+  let model = Model("user");
 
   beforeEach(() => {
-    model = Model<IUser>("user");
+    model = Model("user");
   });
 
   it("async", async function() {

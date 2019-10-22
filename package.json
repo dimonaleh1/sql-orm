@@ -1,6 +1,6 @@
 {
   "name": "@muzikanto/sql-orm",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "engines": {
     "node": "8.9.x"

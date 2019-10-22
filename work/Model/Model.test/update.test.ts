@@ -1,16 +1,11 @@
 import { expect } from "chai";
 import Model from "../";
 
-interface IUser {
-  name: string;
-  age: number;
-}
-
 describe("Update", function() {
-  let model = Model<IUser>("user");
+  let model = Model("user");
 
   beforeEach(() => {
-    model = Model<IUser>("user");
+    model = Model("user");
   });
 
   it("empty", function() {
