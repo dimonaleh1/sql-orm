@@ -16,7 +16,7 @@ model.use(async (query: string) => {
 model
     .select(['name', 'age']
     .where({age: 20})
-    .execute<{ test: number }>()
+    .execute<Array<{ test: number }>>()
     .then(rows=>{});
 
 ----- OR -----
@@ -24,7 +24,7 @@ model
 const select = model.select(['name', 'age'];
 select.where({age: 20});
 select
-    .execute<{ test: number }>()
+    .execute<Array<{ test: number }>>()
     .then(rows=>{});
 
 ----- OR -----
