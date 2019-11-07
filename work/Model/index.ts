@@ -328,16 +328,16 @@ class Builder {
       }
     }
 
+    if (state.order) {
+      params.push(`ORDER BY ${state.order}`);
+    }
+
     if (state.limit) {
       params.push(`LIMIT ${state.limit}`);
     }
 
     if (state.offset) {
       params.push(`OFFSET ${state.offset}`);
-    }
-
-    if (state.order) {
-      params.push(`ORDER BY ${state.order}`);
     }
 
     if (state.group && state.group.length > 0) {
