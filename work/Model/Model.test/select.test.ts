@@ -36,7 +36,7 @@ describe("Select", function() {
     test.group(["name"]);
 
     expect(test.query()).to.be.equal(
-      `SELECT * FROM user JOIN user ON test=1 WHERE age=20 LIMIT 10 OFFSET 20 ORDER BY name GROUP BY name;`
+      `SELECT * FROM user JOIN user ON test=1 WHERE age=20 ORDER BY name LIMIT 10 OFFSET 20 GROUP BY name;`
     );
   });
 
@@ -52,7 +52,7 @@ describe("Select", function() {
       .query();
 
     expect(test).to.be.equal(
-      `SELECT * FROM user JOIN user ON test=1 WHERE age=20 LIMIT 10 OFFSET 20 ORDER BY name GROUP BY name;`
+      `SELECT * FROM user JOIN user ON test=1 WHERE age=20 ORDER BY name LIMIT 10 OFFSET 20 GROUP BY name;`
     );
   });
 });
